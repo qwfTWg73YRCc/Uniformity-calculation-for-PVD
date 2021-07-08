@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "uniformity_calc"
+version = "0.1.0"
+description = "dependencies` package uniformity"
+authors = ["kot <ektov_konstantin@mail.ru>"]
+license = "free"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+decorator = "==4.4.2"
+dxfwrite = "==1.2.2"
+matplotlib = "==3.3.4"
+numpy = "==1.20.1"
+pytest = "==6.2.2"
+toml = "==0.10.2"
+MeshPy = "==2020.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
