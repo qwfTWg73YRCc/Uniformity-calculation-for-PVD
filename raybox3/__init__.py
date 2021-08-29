@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib.tri import Triangulation, UniformTriRefiner, LinearTriInterpolator
 
 # import test_mask
-from .core import RayCalculator, Task, DEFAULT_CALC_FUNCTION
+from .core import RayCalculator, Task, default_calc_function
 from .ray_exceptions import ObjectDimensionError
 from .ray_service import RayService, timeit_io
 from dxfwrite import DXFEngine as dxf
@@ -17,17 +17,17 @@ class RayObject:
     def __init__(self, x=None, y=None, z=None, nx=None, ny=None, nz=None, mesh=None, triangulation=None, *argc):
         if x is None or y is None or z is None:
             raise ObjectDimensionError('Object must be 3 dimension size')
-        vec_1 = np.array((x[1]-x[0],
-                          y[1]-y[0],
-                          z[1]-z[0]))
-        vec_2 = np.array((x[2]-x[1],
-                          y[2]-y[1],
-                          z[2]-z[1]))
-        i=0
-        normal_1 = np.cross(vec_1,vec_2)
-        check = np.cross(normal_1, np.array((nx[0], ny[0], nz[0])))
-        if check[0]!=0 or check[1]!=0 or check[2]!=0:
-            raise ValueError('Normal vector is wrong')
+        #vec_1 = np.array((x[1]-x[0],
+        #                  y[1]-y[0],
+        #                  z[1]-z[0]))
+        #vec_2 = np.array((x[2]-x[1],
+        #                  y[2]-y[1],
+        #                  z[2]-z[1]))
+        #i=0
+        #normal_1 = np.cross(vec_1,vec_2)
+        #check = np.cross(normal_1, np.array((nx[0], ny[0], nz[0])))
+        #if check[0]!=0 or check[1]!=0 or check[2]!=0:
+        #    raise ValueError('Normal vector is wrong')
         self.id = id(self)
         self._initial_x = np.array(x, dtype='f')
         self._initial_y = np.array(y, dtype='f')
@@ -356,12 +356,15 @@ class RayMask(RayObject):
         x = mesh_points[:, 0]
         y = mesh_points[:, 1]
         z = np.array([depth] * len(x))
-        super().__init__(x=x, y=y, z=z, nx=nx, ny=ny, nz=nz, mesh=triangles, triangulation=mesh)
+        super().__init__(x=x, y=y, z=z, nx=nx, ny=ny, nz=nz,
+                         mesh=triangles, triangulation=mesh)
 
     def calculate_intersection(self, source_origin, raysX, raysY, raysZ):
         points = np.column_stack((self._x, self._y, self._z))[self._mesh]
         pointsA, pointsB, pointsC = points[:, 0], points[:, 1], points[:, 2]
-        non_intersected_indexes = RayService.intersect_muller(pointsA, pointsB, pointsC, source_origin, raysX, raysY,
+        non_intersected_indexes = RayService.intersect_muller(pointsA, pointsB,
+                                                              pointsC, source_origin,
+                                                              raysX, raysY,
                                                               raysZ)
         # Intersected rays
         return non_intersected_indexes
@@ -400,8 +403,8 @@ class RayScene:
 
     def plot_sources(self, *sources):
         pass
-    '''
-    @timeit
+
+    @timeit_io
     def calculate_on_rotation(self, V, point, steps, multiproc=0):
         angle = 2 * np.pi / steps
         for source in self._sources_list:
@@ -411,9 +414,9 @@ class RayScene:
                     obj.rotate(V, point, angle)
                     print('Step done, {0} %'.format(i/steps*100))
             print('Source done')
-    '''
+
     @timeit_io
-    def calculate_on_narrow_rotation(self, alpha, V, point, steps, multiproc=0):
+    def calculate_on_narrow_rotation(self, V, point, steps,alpha=np.pi*2, multiproc=0):
         delta_alpha = alpha / steps
         for source in self._sources_list:
             for obj in self._object_list:
@@ -445,7 +448,7 @@ class RayScene:
             for obj in self._object_list:
                 ray_x, ray_y, ray_z, normals = source.calculate_rays(obj)
                 visible_indexes = None
-                colors = DEFAULT_CALC_FUNCTION(ray_x, ray_y, ray_z, normals, visible_indexes, power=source.power)
+                colors = default_calc_function(ray_x, ray_y, ray_z, normals, visible_indexes, power=source.power)
                 obj.sum_colors(colors)
 
 
@@ -458,7 +461,7 @@ class RayScene:
                     visible_rays = np.array([False] * ray_x.size)
                     visible_indexes = self._mask.calculate_intersection(source.origin, ray_x, ray_y, ray_z)
                     visible_rays[visible_indexes==False] = True
-                colors = DEFAULT_CALC_FUNCTION(ray_x, ray_y, ray_z, normals, visible_indexes, power=source.power)
+                colors = default_calc_function(ray_x, ray_y, ray_z, normals, visible_indexes, power=source.power)
                 obj.sum_colors(colors)
 
     '''
@@ -653,5 +656,5 @@ class RayCircleMaskScene(RayScene):
                     visible_rays = np.array([False] * ray_x.size)
                     visible_indexes = self._mask.calculate_intersection(source.origin, ray_x, ray_y, ray_z)
                     visible_rays[visible_indexes==False] = True
-                colors = DEFAULT_CALC_FUNCTION(ray_x, ray_y, ray_z, normals, visible_indexes, power=source.power)
+                colors = default_calc_function(ray_x, ray_y, ray_z, normals, visible_indexes, power=source.power)
                 obj.sum_colors(colors)

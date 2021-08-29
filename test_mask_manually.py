@@ -5,7 +5,8 @@ import numpy as np
 """
 You can add a rectangle mask and make a test static calculation.
 Trying "const = 150" case will give you a white screen = zero thickness.
-Perspective projection gives new projected mask. This new mask gives the same thickness distribution
+Perspective projection gives new projected mask.
+This new mask gives the same thickness distribution on the substrate.
 """
 
 

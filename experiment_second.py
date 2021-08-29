@@ -7,7 +7,7 @@ Experiment 2: "Testing the rotation functionality".
 We can use Circle source, consisted of 12 cosine sources, located on the circle
 with the specified radius (RayCircleSource) or the only one cosine source.
 The result is the same. In some range of the distances 
-between the source and substrate we get that situation. But sometimes it makes sence
+between the source and substrate we get that situation. But sometimes it makes sense
 to use exactly the circle source so this functionality exists in the project.
 """
 
@@ -33,8 +33,9 @@ point = (0, 0, 222)
 #plane.rotate(V=v, point=point, angle=np.pi/2)
 
 if __name__ == '__main__':
-    scene.calculate_on_rotation(V=v, point=point, steps=72)
-    #scene.calculate()
+    #calculate_on_narrow_rotation(self, alpha, V, point, steps, multiproc=0)
+    scene.calculate_on_narrow_rotation(V=v, point=point, steps=72)
+    # scene.calculate()
     plane.normalize_colors()
     plane.plot(contours=40)
     plane.plot_on_line(axis=1, line=17.3)

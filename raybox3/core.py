@@ -3,7 +3,7 @@ from multiprocessing import Pool
 from .ray_service import timeit_io
 
 
-def DEFAULT_CALC_FUNCTION(rays_x, rays_y, rays_z, normal_angles, visible_indexes=None, task_id=None, result_dict=None, power=1):
+def default_calc_function(rays_x, rays_y, rays_z, normal_angles, visible_indexes=None, task_id=None, result_dict=None, power=1):
     """
     Default function of film thickness calculation: 
     delta(color) = cos(a) * cos(b) * cos(n) / r^2 
@@ -67,7 +67,7 @@ class Task:
     def __init__(self, *argc, calc_function=None):
         self.argc = argc
         if calc_function is None:
-            self.calc_function = DEFAULT_CALC_FUNCTION
+            self.calc_function = default_calc_function
         else:
             self.calc_function = calc_function
 

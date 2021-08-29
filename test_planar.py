@@ -2,8 +2,8 @@ from raybox3 import  RayPlane, RayScene, RayPlaneSource
 import numpy as np
 
 """
-This experiment shows, how you can create your own form of the radiation sources by adding
-the coordinates of new point sources to the existing ones... For this you have to
+This experiment shows, how you can create your own form of the radiation (light/deposition)
+sources by adding the coordinates of new point sources to the existing ones... For this you have to
 make the plane source instance. "Source_x" are parallel to the x line, analogically to "source_y".
 So this is mostly useful to create rectangular sources.
 """
