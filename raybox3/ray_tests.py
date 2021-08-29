@@ -8,7 +8,7 @@ import unittest
 class RayBoxTest(unittest.TestCase):
     def setUp(self):
         pass
-
+    """
     def test_init(self):
         #One of dimension miss
         x = (1, 0, 0, 1)
@@ -17,7 +17,7 @@ class RayBoxTest(unittest.TestCase):
         self.assertRaises(ObjectDimensionError, RayObject, x, y)
         self.assertRaises(ObjectDimensionError, RayObject, x, y, z[:-1])
         self.assertRaises(ValueError, RayObject, 'Foo', 'Lol', z)
-
+    """
     def test_service(self):
         vec = (1, 1, -1)
         point = (2, 1, -3)
